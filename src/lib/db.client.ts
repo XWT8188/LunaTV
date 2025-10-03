@@ -142,6 +142,8 @@ class HybridCacheManager {
    */
   private saveUserCache(username: string, cache: UserCacheStore): void {
     if (typeof window === 'undefined') return;
+    // 🔑 修复：使用 Kvrocks/Redis 时不应该往 localStorage 存数据
+    if (STORAGE_TYPE !== 'localstorage') return;
 
     try {
       // 检查缓存大小，超过15MB时清理旧数据
