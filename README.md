@@ -210,6 +210,24 @@
 
 ## 🚀 部署
 
+### ⚡ 一键部署到 Zeabur（最简单）
+
+点击下方按钮即可一键部署，自动配置 LunaTV + Kvrocks 数据库：
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/2425O0/deploy)
+
+**优势**：
+- ✅ 无需配置，一键启动（自动部署完整环境）
+- ✅ 自动 HTTPS 和全球 CDN 加速
+- ✅ 持久化存储，数据永不丢失
+- ✅ 免费额度足够个人使用
+
+点击按钮后填写环境变量即可完成部署！详细说明见下方 [Zeabur 部署指南](#️-zeabur-部署推荐)。
+
+---
+
+### 🐳 Docker 自托管部署
+
 本项目**仅支持 Docker 或其他基于 Docker 的平台**部署（如 Dockge、Portainer、Komodo 等）。
 
 ### 📦 推荐部署方案：Kvrocks 存储

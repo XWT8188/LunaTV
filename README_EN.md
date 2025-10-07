@@ -210,6 +210,24 @@ This project is licensed under **CC BY-NC-SA 4.0**, with the following terms:
 
 ## 🚀 Deployment
 
+### ⚡ One-Click Deploy to Zeabur (Easiest)
+
+Click the button below for one-click deployment, automatically configures LunaTV + Kvrocks database:
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/2425O0/deploy)
+
+**Advantages**:
+- ✅ Zero configuration, instant startup (auto-deploy complete environment)
+- ✅ Automatic HTTPS and global CDN acceleration
+- ✅ Persistent storage, data never lost
+- ✅ Free tier sufficient for personal use
+
+After clicking the button, just fill in the environment variables to complete deployment! See [Zeabur Deployment Guide](#️-zeabur-deployment-recommended) below for details.
+
+---
+
+### 🐳 Docker Self-Hosted Deployment
+
 This project **only supports Docker or Docker-based platforms** (such as Dockge, Portainer, Komodo, etc.).
 
 ### 📦 Recommended: Kvrocks Storage
