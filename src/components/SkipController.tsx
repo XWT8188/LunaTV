@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   deleteSkipConfig,
@@ -589,6 +589,23 @@ export default function SkipController({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // 计算实际的 segments（处理 remaining 模式）
+  const actualSegments = useMemo(() => {
+    if (!skipConfig?.segments) return [];
+
+    return skipConfig.segments.map(seg => {
+      if (seg.type === 'ending' && seg.mode === 'remaining' && seg.remainingTime && duration > 0) {
+        // 基于当前 duration 重新计算片尾时间
+        return {
+          ...seg,
+          start: duration - seg.remainingTime,
+          end: duration,
+        };
+      }
+      return seg;
+    });
+  }, [skipConfig, duration]);
+
   // 初始化加载配置
   useEffect(() => {
     console.log('🔥 useEffect 触发，准备调用 loadSkipConfig');
@@ -956,7 +973,7 @@ export default function SkipController({
       )}
 
       {/* 管理已有片段 - 优化为可拖动 */}
-      {skipConfig && skipConfig.segments && skipConfig.segments.length > 0 && !isSettingMode && (
+      {actualSegments.length > 0 && !isSettingMode && (
         <div
           ref={panelRef}
           onMouseDown={handleMouseDown}
@@ -979,7 +996,7 @@ export default function SkipController({
               <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">可拖动</span>
             </h4>
             <div className="space-y-1">
-              {skipConfig.segments.map((segment, index) => (
+              {actualSegments.map((segment, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded text-xs"
