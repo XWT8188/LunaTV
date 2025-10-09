@@ -37,9 +37,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git merge upstream/main --allow-unrelated-histories --no-edit || true
 
-      # Step 4: 推送合并后的 main 分支到自己的仓库
+      # Step 4: 推送合并后的 main 分支到自己的仓库（使用 PAT，注意提前添加 GH_PAT 到仓库 Secrets）
       - name: Push changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
           git push origin main
 
       # Step 5: 检查 VERSION.txt 和 CHANGELOG 是否更新
@@ -83,14 +86,14 @@ jobs:
           echo "New version detected: ${{ steps.read_version.outputs.version }}. Triggering release.yml..."
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/release.yml/dispatches \
             -d '{"ref":"main"}'
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           repository: ${{ github.repository }}
           retain_days: 0
           keep_minimum_runs: 2
