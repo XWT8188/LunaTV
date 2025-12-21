@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* ArtPlayer 自定义样式 - 基于最新 CSS 变量系统 */
+@import './artplayer-custom.css';
+
 /* Tailwind 4 Dark Mode Configuration - 使用 class 选择器而非媒体查询 */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -230,120 +233,10 @@ div[data-media-provider] video {
   object-fit: contain;
 }
 
-.art-poster {
-  background-size: contain !important; /* 使图片完整展示 */
-  background-position: center center !important; /* 居中显示 */
-  background-repeat: no-repeat !important; /* 防止重复 */
-  background-color: #000 !important; /* 其余区域填充为黑色 */
-}
-
-/* 移动端控制按钮优化 */
-/* 使用liquid-glass插件 + 按钮自动缩小方案，所有按钮都能显示 */
-/* 调整媒体查询从1024px到768px，让平板设备可以使用更多功能 */
-@media (max-width: 768px) {
-  /* PiP按钮保留 - 移动端用户需要画中画功能 */
-  /* 通过flex-shrink: 1让按钮自动缩小，避免溢出 */
-
-  /* 网页全屏在移动端意义不大，继续隐藏节省空间 */
-  .art-control-fullscreenWeb {
-    display: none !important;
-  }
-
-  /* 音量控制在移动端有物理按键，隐藏以节省空间 */
-  .art-control-volume {
-    display: none !important;
-  }
-}
-
-/* 超小屏幕适配 - 确保控制按钮完整显示 */
-@media (max-width: 380px) {
-  /* 减小控制按钮的间距和尺寸 */
-  .art-controls button,
-  .art-control {
-    min-width: 28px !important;
-    padding: 0 4px !important;
-    font-size: 13px !important;
-  }
-
-  /* 减小控制栏的内边距 */
-  .art-controls {
-    padding: 0 4px !important;
-  }
-
-  /* 确保全屏按钮始终可见 */
-  .art-control-fullscreen {
-    display: flex !important;
-    min-width: 32px !important;
-  }
-
-  /* 调整播放器时间显示更紧凑 */
-  .art-control-time {
-    font-size: 11px !important;
-    padding: 0 2px !important;
-  }
-
-  /* 减小进度条高度以节省空间 */
-  .art-progress {
-    height: 3px !important;
-  }
-}
-
-/* 修复音量控制hover区域 - 精确控制触发范围 */
-@media (hover: hover) {
-  .art-control-volume {
-    position: relative !important;
-    padding: 3px; /* 和弹幕按钮一样的hover区域 */
-  }
-
-  /* 缩小hover检测区域，只稍微扩展到面板方向 */
-  .art-control-volume::before {
-    content: '';
-    position: absolute;
-    top: -20px; /* 只扩展20px，避免过早触发 */
-    left: -5px;
-    right: -5px;
-    bottom: -3px;
-    z-index: -1;
-    pointer-events: auto;
-  }
-
-  /* 按钮或面板hover时都显示音量面板 */
-  .art-control-volume:hover .art-volume-panel,
-  .art-volume-panel:hover {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    pointer-events: auto !important;
-    transition: opacity 0.15s ease 0.1s, transform 0.15s ease 0.1s !important; /* 0.1s显示延迟 */
-  }
-
-  /* 音量面板默认隐藏状态，和弹幕一样的延迟 */
-  .art-volume-panel {
-    transition: opacity 0.15s ease 0.3s, transform 0.15s ease 0.3s !important; /* 0.3s隐藏延迟 */
-  }
-}
-
-/* 修复移动端弹幕面板定位问题 - 根据不同挂载位置处理 */
-@media (max-width: 768px) {
-  /* 当弹幕插件挂载到控制栏中心时（横屏，宽度>=512px） */
-  .art-controls-center .artplayer-plugin-danmuku .apd-config-panel,
-  .art-controls-center .artplayer-plugin-danmuku .apd-style-panel {
-    position: absolute !important; /* 加上这个关键属性！ */
-    left: 10% !important;
-    transform: translateX(-50%) !important;
-    right: auto !important;
-    max-width: calc(100vw - 40px) !important;
-  }
-
-  /* 当弹幕插件挂载到播放器容器时（竖屏，宽度<512px） */
-  .art-video-player .artplayer-plugin-danmuku .apd-config-panel,
-  .art-video-player .artplayer-plugin-danmuku .apd-style-panel {
-    position: absolute !important;
-    left: 50% !important; /* 竖屏时居中 */
-    transform: translateX(-50%) !important;
-    right: auto !important;
-    max-width: calc(100vw - 40px) !important;
-  }
-}
+/* ============================================
+   🎬 ArtPlayer 样式已迁移到 artplayer-custom.css
+   使用基于 commit 59e9a32 的最新 CSS 变量系统
+   ============================================ */
 
 /* VideoCard 光泽扫过动画 */
 @keyframes card-shimmer {
@@ -352,74 +245,6 @@ div[data-media-provider] video {
   }
   100% {
     background-position: 200% 0;
-  }
-}
-
-/* 平滑动画效果 */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.4s ease-out;
-}
-
-/* 状态过渡动画 */
-.smooth-transition {
-  transition: all 0.3s ease-in-out;
-}
-
-/* 移动端隐藏弹幕配置按钮 - 使用设置面板简化配置 */
-/* 桌面端保留完整配置按钮 - 提供更多高级选项 */
-@media (max-width: 1080px), (hover: none) {
-  .artplayer-plugin-danmuku .apd-config {
-    display: none !important;
-  }
-}
-
-/* 修复桌面端弹幕配置弹窗hover不稳定问题 */
-@media (min-width: 1081px) and (hover: hover) {
-  /* 扩大按钮的实际hover区域，但不影响视觉 */
-  .artplayer-plugin-danmuku .apd-config {
-    position: relative;
-    padding: 3px; /* 增加一点内边距扩大hover区域 */
-  }
-
-  /* 按钮或面板hover时都显示面板 */
-  .artplayer-plugin-danmuku .apd-config:hover .apd-config-panel,
-  .artplayer-plugin-danmuku .apd-config .apd-config-panel:hover {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
-    transition: opacity 0.15s ease 0.1s !important; /* 添加0.1s显示延迟 */
-  }
-
-  /* 确保面板默认状态是隐藏的，隐藏时有延迟 */
-  .artplayer-plugin-danmuku .apd-config-panel {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-    transition: opacity 0.15s ease 0.3s, visibility 0s ease 0.45s; /* 0.3s隐藏延迟 */
-  }
-
-  /* 面板内部元素在显示时可交互 */
-  .artplayer-plugin-danmuku .apd-config-panel * {
-    pointer-events: auto;
-  }
-
-  /* 防止进度条拖拽时弹窗干扰 */
-  .artplayer[data-dragging="true"] .artplayer-plugin-danmuku .apd-config-panel {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    visibility: hidden !important;
-    transition: none !important;
   }
 }
 

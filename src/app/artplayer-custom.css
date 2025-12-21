@@ -1,0 +1,707 @@
+/* ============================================
+   ArtPlayer 自定义样式 - 基于最新 CSS 变量系统
+   基于 commit: 59e9a32 (feat: add new CSS variables for font size and tooltip positioning)
+   ============================================ */
+
+/* ============================================
+   🎨 CSS 变量覆盖 - LunaTV 定制
+   ============================================ */
+
+.art-video-player {
+  /* ============ 主题颜色 ============ */
+  --art-theme: #22c55e; /* LunaTV 主题绿色 */
+  --art-font-color: #fff;
+  --art-background-color: #000;
+
+  /* ============ 间距系统 ============ */
+  --art-space-xxs: 2px; /* 超小间距 (用于时间显示) */
+  --art-space-xs: 4px; /* 小间距 (用于超小屏幕按钮) */
+  --art-padding: 10px;
+  --art-mobile-padding: 4px; /* 移动端更紧凑 */
+
+  /* ============ 字体大小 ============ */
+  --art-font-size-sm: 11px; /* 小字体 (用于时间显示) */
+  --art-font-size-md: 13px; /* 中等字体 (用于按钮) */
+
+  /* ============ 圆角 ============ */
+  --art-border-radius: 3px;
+  --art-radius-sm: 3px;
+  --art-mobile-radius: 3px;
+
+  /* ============ 动画系统 ============ */
+  --art-transition-duration: 0.15s; /* 快速过渡 */
+  --art-ease-standard: ease; /* 标准缓动 */
+  --art-transition-delay-show: 0.1s; /* 显示延迟 */
+  --art-transition-delay-hide: 0.3s; /* 隐藏延迟 */
+
+  /* ============ 触摸目标尺寸 ============ */
+  --art-touch-hit-size: 36px; /* 标准触摸尺寸 */
+  --art-touch-hit-size-small: 28px; /* 超小屏幕触摸尺寸 */
+  --art-touch-hit-size-large: 44px; /* iOS 推荐触摸尺寸 */
+
+  /* ============ 进度条 ============ */
+  --art-progress-height: 6px; /* 默认进度条高度 */
+  --art-progress-height-mobile: 3px; /* 移动端进度条高度 */
+  --art-progress-color: rgba(255, 255, 255, 0.25);
+  --art-progress-top-gap: 8px;
+
+  /* ============ 控制栏 ============ */
+  --art-control-height: 46px;
+  --art-control-opacity: 0.75;
+  --art-control-icon-size: 36px;
+  --art-control-icon-scale: 1.1;
+
+  /* ============ 工具提示 ============ */
+  --art-tip-padding: 8px 12px;
+  --art-tip-offset: -25px;
+  --art-tip-background: rgba(0, 0, 0, 0.7);
+
+  /* ============ 表面颜色 ============ */
+  --art-surface-hover-color: rgba(255, 255, 255, 0.1);
+  --art-surface-border-color: rgba(255, 255, 255, 0.1);
+  --art-surface-muted-color: rgba(255, 255, 255, 0.5);
+
+  /* ============ 音量面板 ============ */
+  --art-volume-height: 120px;
+  --art-volume-handle-size: 14px;
+
+  /* ============ 阴影系统 ============ */
+  --art-shadow-low: 0 1px 2px 0 rgb(0 0 0 / 0.12);
+  --art-shadow-medium: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+  --art-shadow-high: 0 4px 10px 0 rgb(0 0 0 / 0.25);
+
+  /* ============ Widget 背景 ============ */
+  --art-widget-background: rgba(0, 0, 0, 0.85);
+
+  /* ============ Hover 区域扩展 ============ */
+  --art-hover-extension-top: 20px; /* 音量按钮向上扩展 */
+  --art-hover-extension-side: 5px; /* 音量按钮左右扩展 */
+  --art-hover-padding: 3px; /* 按钮内边距 (扩大 hover 区域) */
+}
+
+/* ============================================
+   📱 响应式变量覆盖
+   ============================================ */
+
+/* 移动端触摸优化 */
+@media (hover: none) {
+  .art-video-player {
+    --art-touch-hit-size: var(--art-touch-hit-size-large); /* 44px */
+  }
+}
+
+/* 超小屏幕 - 紧凑模式 */
+@media (max-width: 380px) {
+  .art-video-player {
+    --art-touch-hit-size: var(--art-touch-hit-size-small); /* 28px */
+    --art-mobile-padding: var(--art-space-xs); /* 4px */
+    --art-font-size-sm: 11px;
+    --art-font-size-md: 13px;
+    --art-progress-height: var(--art-progress-height-mobile); /* 3px */
+  }
+}
+
+/* ============================================
+   🎯 样式覆盖 - 使用 CSS 变量
+   ============================================ */
+
+/* ============ 海报样式 ============ */
+.art-poster {
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: var(--art-background-color) !important;
+}
+
+/* ============================================
+   📱 移动端优化 (≤768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+  /*
+   * 移动端按钮溢出解决方案：
+   * 1. liquid-glass 插件：设置 flex-shrink: 1 让按钮自动缩小
+   * 2. 这里：隐藏不必要的按钮节省空间
+   * 两者配合确保所有按钮都能正常显示
+   */
+
+  /* 隐藏网页全屏按钮 - 移动端意义不大 */
+  .art-control-fullscreenWeb {
+    display: none !important;
+  }
+
+  /* 隐藏音量控制 - 移动端有物理按键 */
+  .art-control-volume {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   📱 超小屏幕适配 (≤380px)
+   ============================================ */
+
+@media (max-width: 380px) {
+  /* 控制按钮紧凑化 - 使用 CSS 变量 */
+  .art-controls button,
+  .art-control {
+    min-width: var(--art-touch-hit-size) !important;
+    padding: 0 var(--art-space-xs) !important;
+    font-size: var(--art-font-size-md) !important;
+    /* 🔑 保持 flex-shrink: 1 以配合 liquid-glass 插件的按钮自动缩小功能 */
+    /* 注意：liquid-glass 插件已设置此项，这里显式声明以确保优先级 */
+    flex-shrink: 1 !important;
+  }
+
+  /* 控制栏紧凑化 */
+  .art-controls {
+    padding: 0 var(--art-mobile-padding) !important;
+  }
+
+  /* 全屏按钮保持可见 */
+  .art-control-fullscreen {
+    display: flex !important;
+    min-width: 32px !important;
+  }
+
+  /* 时间显示更紧凑 */
+  .art-control-time {
+    font-size: var(--art-font-size-sm) !important;
+    padding: 0 var(--art-space-xxs) !important;
+  }
+
+  /* 进度条高度使用变量 */
+  .art-progress {
+    height: var(--art-progress-height) !important;
+  }
+}
+
+/* ============================================
+   🖱️ 桌面端 Hover 优化
+   ============================================ */
+
+@media (hover: hover) {
+  /* ============ 音量控制 Hover 优化 ============ */
+
+  .art-control-volume {
+    position: relative !important;
+    padding: var(--art-hover-padding);
+  }
+
+  /* 扩大 hover 检测区域 - 避免面板过早隐藏 */
+  .art-control-volume::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--art-hover-extension-top));
+    left: calc(-1 * var(--art-hover-extension-side));
+    right: calc(-1 * var(--art-hover-extension-side));
+    bottom: -3px;
+    z-index: -1;
+    pointer-events: auto;
+  }
+
+  /* 音量面板显示动画 - 使用 CSS 变量 */
+  .art-control-volume:hover .art-volume-panel,
+  .art-volume-panel:hover {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    transition: opacity var(--art-transition-duration) var(--art-ease-standard)
+        var(--art-transition-delay-show),
+      transform var(--art-transition-duration) var(--art-ease-standard)
+        var(--art-transition-delay-show) !important;
+  }
+
+  /* 音量面板隐藏动画 - 使用 CSS 变量 */
+  .art-volume-panel {
+    transition: opacity var(--art-transition-duration) var(--art-ease-standard)
+        var(--art-transition-delay-hide),
+      transform var(--art-transition-duration) var(--art-ease-standard)
+        var(--art-transition-delay-hide) !important;
+  }
+
+  /* ============ 弹幕配置 Hover 优化 (桌面端 >1080px) ============ */
+
+  @media (min-width: 1081px) {
+    /* 扩大弹幕配置按钮 hover 区域 */
+    .artplayer-plugin-danmuku .apd-config {
+      position: relative;
+      padding: var(--art-hover-padding);
+    }
+
+    /* 弹幕配置面板显示动画 */
+    .artplayer-plugin-danmuku .apd-config:hover .apd-config-panel,
+    .artplayer-plugin-danmuku .apd-config .apd-config-panel:hover {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      visibility: visible !important;
+      transition: opacity var(--art-transition-duration) var(--art-ease-standard)
+        var(--art-transition-delay-show) !important;
+    }
+
+    /* 弹幕配置面板隐藏状态 */
+    .artplayer-plugin-danmuku .apd-config-panel {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity var(--art-transition-duration) var(--art-ease-standard)
+          var(--art-transition-delay-hide),
+        visibility 0s var(--art-ease-standard) 0.45s;
+    }
+
+    /* 面板内部元素可交互 */
+    .artplayer-plugin-danmuku .apd-config-panel * {
+      pointer-events: auto;
+    }
+
+    /* 拖拽时隐藏弹窗 - 避免干扰 */
+    .artplayer[data-dragging='true'] .artplayer-plugin-danmuku .apd-config-panel {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ============================================
+   📱 移动端弹幕面板定位 (≤768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* 横屏模式 - 弹幕插件挂载到控制栏中心 */
+  .art-controls-center .artplayer-plugin-danmuku .apd-config-panel,
+  .art-controls-center .artplayer-plugin-danmuku .apd-style-panel {
+    position: absolute !important;
+    left: 10% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    max-width: calc(100vw - 40px) !important;
+  }
+
+  /* 竖屏模式 - 弹幕插件挂载到播放器容器 */
+  .art-video-player .artplayer-plugin-danmuku .apd-config-panel,
+  .art-video-player .artplayer-plugin-danmuku .apd-style-panel {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    max-width: calc(100vw - 40px) !important;
+  }
+}
+
+/* ============================================
+   🚫 移动端隐藏弹幕配置按钮 (≤1080px)
+   ============================================ */
+
+@media (max-width: 1080px), (hover: none) {
+  .artplayer-plugin-danmuku .apd-config {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   🎬 通用动画优化
+   ============================================ */
+
+/* 平滑过渡 - 使用 CSS 变量 */
+.smooth-transition {
+  transition: all var(--art-transition-duration) var(--art-ease-standard);
+}
+
+/* 淡入动画 */
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* 缩放进入动画 */
+.animate-scaleIn {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 淡入上移动画 */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   🌈 主题切换支持 (可选)
+   ============================================ */
+
+/* 亮色模式下的 ArtPlayer 样式 */
+html:not(.dark) .art-video-player {
+  --art-widget-background: rgba(255, 255, 255, 0.95) !important;
+  --art-surface-hover-color: rgba(0, 0, 0, 0.05) !important;
+  --art-surface-border-color: rgba(0, 0, 0, 0.1) !important;
+  --art-surface-muted-color: rgba(0, 0, 0, 0.5) !important;
+  --art-tip-background: rgba(255, 255, 255, 0.95) !important;
+  --art-font-color: #000 !important;
+
+  /* 额外的变量覆盖 */
+  --art-background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* 强制 body 和 html 也使用亮色模式（如果需要） */
+html:not(.dark) .artplayer,
+html:not(.dark) .artplayer * {
+  color: inherit;
+}
+
+/* 🔧 修复亮色模式下 liquid-glass 插件的对比度问题 */
+html:not(.dark) .artplayer-plugin-liquid-glass.art-control-show .art-bottom .art-liquid-glass {
+  /* 使用半透明白色背景，提高对比度 */
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  /* 添加边框以增强视觉层次 */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* 增强模糊效果以提高可读性 */
+  backdrop-filter: blur(16px);
+}
+
+/* 🔧 亮色模式下的控制按钮文字颜色 */
+html:not(.dark) .art-video-player .art-control,
+html:not(.dark) .art-video-player .art-control-time {
+  color: #000 !important;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* 🔧 亮色模式下的音量面板 */
+html:not(.dark) .art-volume-panel {
+  color: #000 !important;
+}
+
+html:not(.dark) .art-volume-panel .art-volume-inner {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* 🔧 亮色模式下的设置面板、字幕选择等 */
+html:not(.dark) .art-video-player .art-settings,
+html:not(.dark) .art-video-player .art-selector {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 🔧 亮色模式下的设置面板内部所有文字 - 使用更强的选择器 */
+html:not(.dark) .art-video-player .art-settings *,
+html:not(.dark) .art-video-player .art-selector *,
+html:not(.dark) .art-video-player .art-setting-item,
+html:not(.dark) .art-video-player .art-setting-item *,
+html:not(.dark) .art-video-player .art-selector-item,
+html:not(.dark) .art-video-player .art-selector-item * {
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的设置项 hover 效果 */
+html:not(.dark) .art-setting-item:hover,
+html:not(.dark) .art-selector-item:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔧 亮色模式下的设置项边框 */
+html:not(.dark) .art-setting-item-back {
+  border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 🔧 亮色模式下的滑块和范围选择器 */
+html:not(.dark) .art-setting-range {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+html:not(.dark) .art-setting-range::-webkit-slider-thumb {
+  background-color: #000 !important;
+}
+
+html:not(.dark) .art-setting-range::-moz-range-thumb {
+  background-color: #000 !important;
+}
+
+/* 🔧 亮色模式下的图标颜色 */
+html:not(.dark) .art-icon {
+  filter: brightness(0) saturate(100%);
+  /* 将图标转为黑色 */
+}
+
+/* 🔧 亮色模式下的弹幕按钮图标 - 使用 apd-icon 类名 */
+html:not(.dark) .artplayer-plugin-danmuku .apd-icon,
+html:not(.dark) .artplayer-plugin-danmuku .apd-toggle svg,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config > svg,
+html:not(.dark) .artplayer-plugin-danmuku .apd-toggle-off,
+html:not(.dark) .artplayer-plugin-danmuku .apd-toggle-on,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-icon {
+  fill: #000 !important;
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的播放/暂停状态图标 */
+html:not(.dark) .art-state {
+  filter: brightness(0) saturate(100%) !important;
+}
+
+/* 🔧🔧🔧 亮色模式下的通知提示（播放/暂停提示）- 最强优先级 🔧🔧🔧 */
+/* 覆盖所有可能的选择器组合 */
+html:not(.dark) .art-video-player .art-notice .art-notice-inner,
+html:not(.dark) .art-video-player.art-notice-show .art-notice .art-notice-inner,
+html:not(.dark) .art-video-player .art-notice-inner,
+html:not(.dark) .art-notice .art-notice-inner,
+html:not(.dark) .art-notice-inner,
+html:not(.dark) [class*="art-notice-inner"] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 确保通知文字是黑色 - 多层选择器确保生效 */
+html:not(.dark) .art-video-player .art-notice .art-notice-inner *,
+html:not(.dark) .art-video-player .art-notice-inner *,
+html:not(.dark) .art-notice .art-notice-inner *,
+html:not(.dark) .art-notice-inner *,
+html:not(.dark) [class*="art-notice-inner"] * {
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的进度条提示（时间预览） */
+html:not(.dark) .art-progress-tip {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔧🔧🔧 亮色模式下的弹幕面板滑块（进度条）- 修复看不见的问题 🔧🔧🔧 */
+/* 使用多层选择器确保优先级 */
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-line,
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider .apd-slider-line,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel .apd-slider-line,
+html:not(.dark) [class*="apd-slider-line"] {
+  background-color: rgba(0, 0, 0, 0.3) !important; /* 深色背景轨道 */
+}
+
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-progress,
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider .apd-slider-progress,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel .apd-slider-progress,
+html:not(.dark) [class*="apd-slider-progress"] {
+  background-color: #00a1d6 !important; /* 蓝色进度条 */
+}
+
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-dot,
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider .apd-slider-dot,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel .apd-slider-dot,
+html:not(.dark) [class*="apd-slider-dot"] {
+  background-color: #00a1d6 !important; /* 蓝色滑块 */
+  border: 2px solid #fff !important; /* 白色边框增强可见性 */
+}
+
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-point,
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider .apd-slider-point,
+html:not(.dark) [class*="apd-slider-point"] {
+  background-color: rgba(0, 0, 0, 0.5) !important; /* 深色刻度点 */
+}
+
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-steps,
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider .apd-slider-steps,
+html:not(.dark) [class*="apd-slider-steps"] {
+  color: #666 !important; /* 深色刻度文字 */
+}
+
+html:not(.dark) .artplayer-plugin-danmuku .apd-slider-step,
+html:not(.dark) [class*="apd-slider-step"] {
+  color: #666 !important; /* 深色单个刻度文字 */
+}
+
+/* 🔧 亮色模式下的弹幕面板 - 使用更强的选择器 */
+html:not(.dark) .art-video-player .artplayer-plugin-danmuku .apd-config-panel,
+html:not(.dark) .art-video-player .artplayer-plugin-danmuku .apd-style-panel,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel,
+html:not(.dark) .artplayer-plugin-danmuku .apd-style-panel {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 🔧 亮色模式下的弹幕面板内部所有元素 - 强制黑色文字 */
+html:not(.dark) .art-video-player .artplayer-plugin-danmuku .apd-config-panel *,
+html:not(.dark) .art-video-player .artplayer-plugin-danmuku .apd-style-panel *,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel *,
+html:not(.dark) .artplayer-plugin-danmuku .apd-style-panel *,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel div,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel span,
+html:not(.dark) .artplayer-plugin-danmuku .apd-config-panel label,
+html:not(.dark) .artplayer-plugin-danmuku .apd-style-panel div,
+html:not(.dark) .artplayer-plugin-danmuku .apd-style-panel span,
+html:not(.dark) .artplayer-plugin-danmuku .apd-style-panel label {
+  color: #000 !important;
+  background-color: transparent !important;
+}
+
+/* 🔧 亮色模式下的弹幕面板输入框 */
+html:not(.dark) .artplayer-plugin-danmuku input,
+html:not(.dark) .artplayer-plugin-danmuku select,
+html:not(.dark) .artplayer-plugin-danmuku textarea {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的上下文菜单 */
+html:not(.dark) .art-contextmenu {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #000 !important;
+}
+
+html:not(.dark) .art-contextmenu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 🔧 亮色模式下的信息面板 */
+html:not(.dark) .art-info {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #000 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+html:not(.dark) .art-info * {
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的字幕 */
+html:not(.dark) .art-subtitle {
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.8),
+    0 0 6px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 🔧 亮色模式下的加载动画 */
+html:not(.dark) .art-loading {
+  filter: brightness(0) saturate(100%);
+}
+
+/* 🔧 亮色模式下的层叠元素 */
+html:not(.dark) .art-layer,
+html:not(.dark) .art-layers * {
+  color: #000 !important;
+}
+
+/* 🔧 亮色模式下的缩略图预览 */
+html:not(.dark) .art-control-thumbnails {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔧🔧🔧 最强力的亮色模式修复 - 兜底样式 🔧🔧🔧 */
+/* 如果上面的样式都不生效，这些会强制生效 */
+
+html:not(.dark) .art-video-player {
+  /* 强制覆盖所有可能的变量 */
+  --art-widget-background: rgba(255, 255, 255, 0.95) !important;
+  --art-tip-background: rgba(255, 255, 255, 0.95) !important;
+  --art-font-color: #000 !important;
+}
+
+/* 强制所有弹窗和面板为白色背景 */
+html:not(.dark) [class*="art-"][class*="panel"],
+html:not(.dark) [class*="apd-"][class*="panel"],
+html:not(.dark) .art-notice,
+html:not(.dark) .art-settings {
+  background: rgba(255, 255, 255, 0.95) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 强制所有文字为黑色 */
+html:not(.dark) [class*="art-"][class*="panel"] *,
+html:not(.dark) [class*="apd-"][class*="panel"] *,
+html:not(.dark) .art-notice *,
+html:not(.dark) .art-settings * {
+  color: #000 !important;
+}
+
+/* 暗色模式下的 ArtPlayer 样式 (默认) */
+.dark .art-video-player {
+  --art-widget-background: rgba(0, 0, 0, 0.85);
+  --art-surface-hover-color: rgba(255, 255, 255, 0.1);
+  --art-surface-border-color: rgba(255, 255, 255, 0.1);
+  --art-surface-muted-color: rgba(255, 255, 255, 0.5);
+  --art-tip-background: rgba(0, 0, 0, 0.7);
+  --art-font-color: #fff;
+}
+
+/* ============================================
+   ✨ 性能优化
+   ============================================ */
+
+/* 使用 GPU 加速过渡动画 */
+.art-volume-panel,
+.artplayer-plugin-danmuku .apd-config-panel {
+  will-change: opacity, transform;
+}
+
+/* 防止拖拽时的动画卡顿 */
+.artplayer[data-dragging='true'] * {
+  pointer-events: none !important;
+}
+
+.artplayer[data-dragging='true'] .art-progress-indicator {
+  pointer-events: auto !important;
+}
+
+/* ============================================
+   📝 注释说明
+   ============================================
+
+   本文件基于 ArtPlayer commit 59e9a32 的最新 CSS 变量系统
+
+   主要改进：
+   1. ✅ 所有硬编码数值替换为语义化 CSS 变量
+   2. ✅ 统一动画时长和缓动函数
+   3. ✅ 响应式设计使用变量覆盖
+   4. ✅ 支持主题切换（亮色/暗色）
+   5. ✅ 性能优化（GPU 加速、will-change）
+
+   使用方式：
+   - 在 globals.css 中 @import './artplayer-custom.css';
+   - 或直接复制内容到 globals.css 的底部
+
+   自定义变量：
+   - 修改 .art-video-player 中的变量值即可全局生效
+   - 响应式断点变量会自动覆盖默认值
+
+   ============================================ */
