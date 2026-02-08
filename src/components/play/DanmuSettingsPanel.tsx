@@ -286,7 +286,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
           }}
         />
         <div className='relative flex items-center gap-3'>
-          <div className="p-2 rounded-xl backdrop-blur-sm" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>
+          <div className="p-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-600/20 backdrop-blur-sm">
             <MessageSquare className='w-4 h-4 text-green-400' />
           </div>
           <div className="flex flex-col">
@@ -296,9 +296,8 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
             <span className="text-[10px] text-gray-400">Danmaku Settings</span>
           </div>
           <span
-            className='px-2.5 py-1 rounded-full text-xs font-semibold text-green-300 border border-green-500/30 backdrop-blur-sm'
+            className='px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-green-500/20 to-emerald-600/20 text-green-300 border border-green-500/30 backdrop-blur-sm'
             style={{
-              background: 'rgba(16, 185, 129, 0.2)',
               boxShadow: '0 0 12px rgba(16, 185, 129, 0.2)',
             }}
           >
@@ -310,8 +309,8 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
           {loadMeta && (
             <button
               onClick={() => setShowLoadMeta(!showLoadMeta)}
-              className={`p-2 hover:bg-gray-800/80 rounded-xl transition-all duration-200 group active:scale-95 ${
-                showLoadMeta ? 'bg-gray-800/80' : ''
+              className={`p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group active:scale-95 ${
+                showLoadMeta ? 'bg-white/10' : ''
               }`}
               style={{
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -339,7 +338,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
                 }
               }}
               disabled={loading || isReloading}
-              className='p-2 hover:bg-gray-800/80 rounded-xl transition-all duration-200 group active:scale-95'
+              className='p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group active:scale-95'
               style={{
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
               }}
@@ -782,6 +781,11 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
 
       {/* CSS样式 - 自定义滑块样式 */}
       <style jsx>{`
+        /* 重置按钮默认背景，防止 Portal 渲染到 ArtPlayer 内部时显示白色 */
+        button {
+          background-color: transparent;
+        }
+
         input[type='range']::-webkit-slider-thumb {
           appearance: none;
           width: 16px;
