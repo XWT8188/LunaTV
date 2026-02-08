@@ -259,12 +259,10 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
         transitionTimingFunction: prefersReducedMotion
           ? 'linear'
           : 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-        // 🔥 背景渐变（全屏时使用纯色，非全屏时使用毛玻璃）
-        background: isFullscreen
-          ? 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%)'
-          : 'linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 100%)',
-        backdropFilter: isFullscreen ? 'none' : 'blur(24px) saturate(180%)',
-        WebkitBackdropFilter: isFullscreen ? 'none' : 'blur(24px) saturate(180%)',
+        // 🔥 背景渐变（全屏时也可以使用毛玻璃效果）
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 100%)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         borderRadius: '20px',
         border: '1px solid rgba(255, 255, 255, 0.15)',
       }}
@@ -288,7 +286,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
           }}
         />
         <div className='relative flex items-center gap-3'>
-          <div className="p-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-600/20 backdrop-blur-sm">
+          <div className="p-2 rounded-xl backdrop-blur-sm" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>
             <MessageSquare className='w-4 h-4 text-green-400' />
           </div>
           <div className="flex flex-col">
@@ -298,8 +296,9 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
             <span className="text-[10px] text-gray-400">Danmaku Settings</span>
           </div>
           <span
-            className='px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-green-500/20 to-emerald-600/20 text-green-300 border border-green-500/30 backdrop-blur-sm'
+            className='px-2.5 py-1 rounded-full text-xs font-semibold text-green-300 border border-green-500/30 backdrop-blur-sm'
             style={{
+              background: 'rgba(16, 185, 129, 0.2)',
               boxShadow: '0 0 12px rgba(16, 185, 129, 0.2)',
             }}
           >
@@ -311,8 +310,8 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
           {loadMeta && (
             <button
               onClick={() => setShowLoadMeta(!showLoadMeta)}
-              className={`p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group active:scale-95 ${
-                showLoadMeta ? 'bg-white/10' : ''
+              className={`p-2 hover:bg-gray-800/80 rounded-xl transition-all duration-200 group active:scale-95 ${
+                showLoadMeta ? 'bg-gray-800/80' : ''
               }`}
               style={{
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -340,7 +339,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
                 }
               }}
               disabled={loading || isReloading}
-              className='p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group active:scale-95'
+              className='p-2 hover:bg-gray-800/80 rounded-xl transition-all duration-200 group active:scale-95'
               style={{
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
               }}
