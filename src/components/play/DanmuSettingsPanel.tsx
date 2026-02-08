@@ -64,6 +64,8 @@ interface DanmuSettingsPanelProps {
   error?: Error | null;
   /** 播放器容器元素（用于全屏时渲染） */
   playerContainer?: HTMLElement | null;
+  /** 是否处于全屏模式 */
+  isFullscreen?: boolean;
 }
 
 // ============================================================================
@@ -121,6 +123,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
   loadMeta,
   error,
   playerContainer,
+  isFullscreen = false,
 }: DanmuSettingsPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -256,10 +259,12 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
         transitionTimingFunction: prefersReducedMotion
           ? 'linear'
           : 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-        // 🔥 背景渐变（移除 backdrop-filter 避免色彩断层）
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%)',
-        // backdropFilter: 'blur(24px) saturate(180%)',
-        // WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        // 🔥 背景渐变（全屏时使用纯色，非全屏时使用毛玻璃）
+        background: isFullscreen
+          ? 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%)'
+          : 'linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 100%)',
+        backdropFilter: isFullscreen ? 'none' : 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: isFullscreen ? 'none' : 'blur(24px) saturate(180%)',
         borderRadius: '20px',
         border: '1px solid rgba(255, 255, 255, 0.15)',
       }}
@@ -826,9 +831,9 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
     </div>
   );
 
-  // 如果有播放器容器且在全屏模式，使用 Portal 渲染到播放器容器内
-  // 否则渲染到 body（普通模式）
-  if (playerContainer) {
+  // 只在全屏模式下使用 Portal 渲染到播放器容器内
+  // 非全屏时渲染到普通位置（可以使用 backdrop-filter）
+  if (isFullscreen && playerContainer) {
     return createPortal(panelContent, playerContainer);
   }
 
