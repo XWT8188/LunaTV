@@ -241,6 +241,10 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
         lineHeight: 'initial',
         textShadow: 'none',
         fontFamily: 'inherit',
+        // 🔧 强制创建独立渲染层，避免色彩断层
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+        isolation: 'isolate',
         // 🎨 多层深度阴影（Apple风格）
         boxShadow: `
           0 2px 8px rgba(0, 0, 0, 0.1),
