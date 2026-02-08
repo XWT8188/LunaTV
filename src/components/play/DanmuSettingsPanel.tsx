@@ -781,9 +781,9 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
 
       {/* CSS样式 - 自定义滑块样式 */}
       <style jsx>{`
-        /* 重置按钮默认背景，防止 Portal 渲染到 ArtPlayer 内部时显示白色 */
-        button {
-          background-color: transparent;
+        /* 重置 ArtPlayer 强制设置的 svg fill: #fff，恢复 Lucide 图标的原始样式 */
+        svg {
+          fill: none;
         }
 
         input[type='range']::-webkit-slider-thumb {
