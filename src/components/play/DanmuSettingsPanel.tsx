@@ -256,10 +256,10 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
         transitionTimingFunction: prefersReducedMotion
           ? 'linear'
           : 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-        // 🔥 背景毛玻璃 + 渐变
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 100%)',
-        backdropFilter: 'blur(24px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        // 🔥 背景渐变（移除 backdrop-filter 避免色彩断层）
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%)',
+        // backdropFilter: 'blur(24px) saturate(180%)',
+        // WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         borderRadius: '20px',
         border: '1px solid rgba(255, 255, 255, 0.15)',
       }}
