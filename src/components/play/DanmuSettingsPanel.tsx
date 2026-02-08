@@ -130,6 +130,8 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
   const [sliderFontSize, setSliderFontSize] = useState(settings.fontSize);
   const [sliderSpeed, setSliderSpeed] = useState(settings.speed);
   const [sliderOpacity, setSliderOpacity] = useState(settings.opacity);
+  const [sliderMarginTop, setSliderMarginTop] = useState(typeof settings.margin[0] === 'string' ? parseFloat(settings.margin[0]) : settings.margin[0]);
+  const [sliderMarginBottom, setSliderMarginBottom] = useState(typeof settings.margin[1] === 'string' ? parseFloat(settings.margin[1]) : settings.margin[1]);
   const [showLoadMeta, setShowLoadMeta] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
@@ -170,7 +172,9 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
     setSliderFontSize(settings.fontSize);
     setSliderSpeed(settings.speed);
     setSliderOpacity(settings.opacity);
-  }, [settings.fontSize, settings.speed, settings.opacity]);
+    setSliderMarginTop(typeof settings.margin[0] === 'string' ? parseFloat(settings.margin[0]) : settings.margin[0]);
+    setSliderMarginBottom(typeof settings.margin[1] === 'string' ? parseFloat(settings.margin[1]) : settings.margin[1]);
+  }, [settings.fontSize, settings.speed, settings.opacity, settings.margin]);
 
   const commitFontSize = useCallback(() => {
     if (sliderFontSize !== settings.fontSize) {
@@ -189,6 +193,18 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
       handleUpdate('opacity', sliderOpacity);
     }
   }, [handleUpdate, settings.opacity, sliderOpacity]);
+
+  const commitMarginTop = useCallback(() => {
+    const rounded = Math.round(sliderMarginTop / 5) * 5;
+    const topMargin = rounded === 0 ? 10 : `${rounded}%`;
+    handleUpdate('margin', [topMargin, settings.margin[1]]);
+  }, [handleUpdate, settings.margin, sliderMarginTop]);
+
+  const commitMarginBottom = useCallback(() => {
+    const rounded = Math.round(sliderMarginBottom / 5) * 5;
+    const bottomMargin = rounded === 0 ? 10 : `${rounded}%`;
+    handleUpdate('margin', [settings.margin[0], bottomMargin]);
+  }, [handleUpdate, settings.margin, sliderMarginBottom]);
 
   // 点击外部关闭
   useEffect(() => {
@@ -663,20 +679,19 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
                 min={0}
                 max={100}
                 step={5}
-                value={typeof settings.margin[0] === 'string' ? parseFloat(settings.margin[0]) : settings.margin[0]}
-                onChange={(e) => {
-                  const topValue = Math.round(parseFloat(e.target.value) / 5) * 5;
-                  const topMargin = topValue === 0 ? 10 : `${topValue}%`;
-                  handleUpdate('margin', [topMargin, settings.margin[1]]);
-                }}
+                value={sliderMarginTop}
+                onChange={(e) => setSliderMarginTop(parseFloat(e.target.value))}
+                onMouseUp={commitMarginTop}
+                onTouchEnd={commitMarginTop}
+                onBlur={commitMarginTop}
                 className='w-full h-2 rounded-full appearance-none cursor-pointer transition-all'
                 style={{
-                  background: `linear-gradient(to right, #10b981 0%, #10b981 ${(typeof settings.margin[0] === 'string' ? parseFloat(settings.margin[0]) : settings.margin[0])}%, rgba(75, 85, 99, 0.5) ${(typeof settings.margin[0] === 'string' ? parseFloat(settings.margin[0]) : settings.margin[0])}%, rgba(75, 85, 99, 0.5) 100%)`,
+                  background: `linear-gradient(to right, #10b981 0%, #10b981 ${sliderMarginTop}%, rgba(75, 85, 99, 0.5) ${sliderMarginTop}%, rgba(75, 85, 99, 0.5) 100%)`,
                 }}
               />
             </div>
             <span className='text-xs text-green-400 w-12 text-right font-mono font-semibold tabular-nums'>
-              {typeof settings.margin[0] === 'string' ? settings.margin[0] : settings.margin[0] === 10 ? '无' : `${settings.margin[0]}%`}
+              {sliderMarginTop === 0 ? '无' : `${sliderMarginTop}%`}
             </span>
           </div>
 
@@ -695,20 +710,19 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
                 min={0}
                 max={100}
                 step={5}
-                value={typeof settings.margin[1] === 'string' ? parseFloat(settings.margin[1]) : settings.margin[1]}
-                onChange={(e) => {
-                  const bottomValue = Math.round(parseFloat(e.target.value) / 5) * 5;
-                  const bottomMargin = bottomValue === 0 ? 10 : `${bottomValue}%`;
-                  handleUpdate('margin', [settings.margin[0], bottomMargin]);
-                }}
+                value={sliderMarginBottom}
+                onChange={(e) => setSliderMarginBottom(parseFloat(e.target.value))}
+                onMouseUp={commitMarginBottom}
+                onTouchEnd={commitMarginBottom}
+                onBlur={commitMarginBottom}
                 className='w-full h-2 rounded-full appearance-none cursor-pointer transition-all'
                 style={{
-                  background: `linear-gradient(to right, #10b981 0%, #10b981 ${(typeof settings.margin[1] === 'string' ? parseFloat(settings.margin[1]) : settings.margin[1])}%, rgba(75, 85, 99, 0.5) ${(typeof settings.margin[1] === 'string' ? parseFloat(settings.margin[1]) : settings.margin[1])}%, rgba(75, 85, 99, 0.5) 100%)`,
+                  background: `linear-gradient(to right, #10b981 0%, #10b981 ${sliderMarginBottom}%, rgba(75, 85, 99, 0.5) ${sliderMarginBottom}%, rgba(75, 85, 99, 0.5) 100%)`,
                 }}
               />
             </div>
             <span className='text-xs text-green-400 w-12 text-right font-mono font-semibold tabular-nums'>
-              {typeof settings.margin[1] === 'string' ? settings.margin[1] : settings.margin[1] === 10 ? '无' : `${settings.margin[1]}%`}
+              {sliderMarginBottom === 0 ? '无' : `${sliderMarginBottom}%`}
             </span>
           </div>
         </div>
@@ -783,7 +797,7 @@ export const DanmuSettingsPanel = memo(function DanmuSettingsPanel({
       <style jsx>{`
         /* 重置 ArtPlayer 强制设置的 svg fill: #fff，恢复 Lucide 图标的原始样式 */
         svg {
-          fill: none;
+          fill: none !important;
         }
 
         input[type='range']::-webkit-slider-thumb {
